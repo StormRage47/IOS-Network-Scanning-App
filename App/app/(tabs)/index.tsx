@@ -1,32 +1,26 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
-  const [target, setTarget] = useState('');
-
-  const handleScan = () => {
-    console.log('Scanning:', target);
-  };
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Network Scanner</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter IP or Domain"
-        placeholderTextColor="#888"
-        value={target}
-        onChangeText={setTarget}
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleScan}>
-        <Text style={styles.buttonText}>Start Scan</Text>
+      <TouchableOpacity
+        style={styles.primaryButton}
+        onPress={() => router.push('/explore')}
+      >
+        <Text style={styles.buttonText}>Ağı Tara</Text>
       </TouchableOpacity>
 
-      <View style={styles.resultBox}>
-        <Text style={styles.resultText}>Scan results will appear here</Text>
-      </View>
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => router.push('/history')}
+      >
+        <Text style={styles.secondaryText}>Geçmiş Tarama</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -34,40 +28,31 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0d1117',
-    padding: 20,
+    backgroundColor: '#f4f6f8',
     justifyContent: 'center',
+    alignItems: 'center'
   },
   title: {
-    color: '#58a6ff',
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 40
   },
-  input: {
-    backgroundColor: '#161b22',
-    color: 'white',
+  primaryButton: {
+    backgroundColor: '#007bff',
     padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  button: {
-    backgroundColor: '#238636',
-    padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
+    width: 220,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#fff',
+    fontSize: 16
   },
-  resultBox: {
-    backgroundColor: '#161b22',
-    padding: 20,
-    borderRadius: 10,
+  secondaryButton: {
+    padding: 10
   },
-  resultText: {
-    color: '#8b949e',
-  },
+  secondaryText: {
+    color: '#555'
+  }
 });

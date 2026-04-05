@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   scanButton: {
+    marginTop: 40 ,
     backgroundColor: '#28a745',
     padding: 15,
     borderRadius: 12,

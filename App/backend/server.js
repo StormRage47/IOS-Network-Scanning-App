@@ -15,6 +15,8 @@ app.get('/', (req, res) => {
   res.send('API çalışıyor');
 });
 
-app.listen(3000, () => {
-  console.log('Server 3000 portunda çalışıyor');
-}); 
+const PORT = 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server ${PORT} portunda çalışıyor`);
+});

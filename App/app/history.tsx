@@ -1,14 +1,39 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
 
 export default function HistoryScreen() {
+  const [scans, setScans] = useState<any[]>([]);
+
+  const fetchScans = async () => {
+    try {
+      const res = await fetch('http://192.168.1.14:3000/api/scans');
+      const data = await res.json();
+      setScans(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchScans();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tarama Geçmişi</Text>
 
-      <View style={styles.card}>
-        <Text>192.168.1.10 - Laptop</Text>
-        <Text style={styles.date}>12.04.2026</Text>
-      </View>
+      <FlatList
+        data={scans}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text>{JSON.stringify(item.devices)}</Text>
+            <Text style={styles.date}>
+              {new Date(item.date).toLocaleString()}
+            </Text>
+          </View>
+        )}
+      />
     </View>
   );
 }

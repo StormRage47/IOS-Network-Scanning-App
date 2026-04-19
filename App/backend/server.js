@@ -32,13 +32,13 @@ app.listen(PORT, '0.0.0.0', () => {
 
 mongoose.connect('mongodb+srv://azboysuleyman2054_db_user:xMEQh4xQreBARtHB@cluster0.pgvueqy.mongodb.net/networkdb?retryWrites=true&w=majority')
   .then(() => {
-    console.log("✅ Gerçekten bağlandık kanki, veri akışı hazır!");
+    console.log("veri akışı hazır!");
   })
   .catch((err) => {
-    console.error("❌ AHAN DA HATA BURADA:");
+    console.error("HATA:");
     console.error(err.message);
     if (err.message.includes('IP')) {
-      console.log("👉 IP izni hala aktif olmamış veya yanlış.");
+      console.log("IP izni hala aktif olmamış veya yanlış.");
     }
   });
 

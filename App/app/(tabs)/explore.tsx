@@ -7,7 +7,7 @@ export default function ScanScreen() {
 
   const sendToBackend = async (devices: any[]) => {
     try {
-        await fetch('http://192.168.1.14:3000/api/scan', {
+        await fetch('http://192.168.1.15:3000/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ devices })

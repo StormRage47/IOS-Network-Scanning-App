@@ -6,7 +6,7 @@ export default function HistoryScreen() {
 
   const fetchScans = async () => {
     try {
-      const res = await fetch('http://192.168.1.14:3000/api/scans');
+      const res = await fetch('http://192.168.1.15:3000/api/scans');
       const data = await res.json();
       setScans(data);
     } catch (err) {
@@ -24,15 +24,26 @@ export default function HistoryScreen() {
 
       <FlatList
         data={scans}
-        keyExtractor={(_, i) => i.toString()}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text>{JSON.stringify(item.devices)}</Text>
+            
+            {item.devices.map((device, index) => (
+              <View key={index} style={styles.deviceRow}>
+                <Text style={styles.deviceName}>{device.name}</Text>
+                <Text style={styles.ip}>{device.ip}</Text>
+              </View>
+            ))}
+
             <Text style={styles.date}>
               {new Date(item.date).toLocaleString()}
             </Text>
+
           </View>
         )}
+        ListEmptyComponent={
+          <Text style={styles.empty}>Henüz kayıt yok</Text>
+        }
       />
     </View>
   );
@@ -52,10 +63,30 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     padding: 15,
-    borderRadius: 10
+    borderRadius: 12,
+    marginBottom: 15,
+    elevation: 3
+  },
+  deviceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5
+  },
+  deviceName: {
+    fontWeight: 'bold'
+  },
+  ip: {
+    color: '#555'
   },
   date: {
-    color: '#888',
-    marginTop: 5
+    marginTop: 10,
+    fontSize: 12,
+    color: '#888'
+  },
+  empty: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#888'
   }
 });
+

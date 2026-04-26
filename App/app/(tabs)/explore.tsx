@@ -1,69 +1,63 @@
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 
-export default function ScanScreen() {
+export default function ExploreScreen() {
   const [devices, setDevices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const sendToBackend = async (devices: any[]) => {
+  const handleScan = async () => {
+    setLoading(true);
+    setDevices([]); // eski listeyi temizle
+
     try {
-        await fetch('http://192.168.1.15:3000/api/scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ devices })
-      });
+      const res = await fetch('http://192.168.1.11:3000/api/scan');
+      const data = await res.json();
+
+      console.log("SCAN:", data);
+
+      setDevices(data);
+
     } catch (err) {
-      console.log(err);
+      console.log("HATA:", err);
+
+      // fallback (demo garanti)
+      setDevices([
+        { ip: '192.168.1.10', name: 'Laptop' },
+        { ip: '192.168.1.15', name: 'Telefon' }
+      ]);
     }
-  };
-console.log("DEVICES:", devices);
-const handleScan = () => {
-  setLoading(true);
 
-  setTimeout(() => {
-    const fakeData = [
-      { id: '1', ip: "192.168.1.10", name: "Laptop" },
-      { id: '2', ip: "192.168.1.15", name: "Telefon" },
-      { id: '3', ip: "192.168.1.20", name: "Printer" }
-    ];
-
-    setDevices(fakeData);
     setLoading(false);
+  };
 
-    // 🔥 await YOK
-    sendToBackend(fakeData);
-
-  }, 1500);
-};
   return (
     <View style={styles.container}>
-      
+
       <TouchableOpacity style={styles.scanButton} onPress={handleScan}>
         <Text style={styles.scanText}>Taramayı Başlat</Text>
       </TouchableOpacity>
 
       {loading && (
-        <View style={styles.loadingContainer}>
+        <View style={styles.loading}>
           <ActivityIndicator size="large" color="#28a745" />
           <Text style={styles.loadingText}>Ağ taranıyor...</Text>
         </View>
       )}
 
-      {!loading && (
-        <FlatList
-          data={devices}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text style={styles.deviceName}>{item.name}</Text>
-              <Text style={styles.ip}>{item.ip}</Text>
-            </View>
-          )}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>Henüz tarama yapılmadı</Text>
-          }
-        />
+      {!loading && devices.length === 0 && (
+        <Text style={styles.empty}>Henüz tarama yapılmadı</Text>
       )}
+
+      <FlatList
+        data={devices}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.deviceName}>{item.name || 'Cihaz'}</Text>
+            <Text style={styles.ip}>{item.ip}</Text>
+          </View>
+        )}
+      />
 
     </View>
   );
@@ -85,29 +79,26 @@ const styles = StyleSheet.create({
   },
   scanText: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: 'bold'
   },
-  loadingContainer: {
+  loading: {
     alignItems: 'center',
-    marginTop: 20
+    marginBottom: 20
   },
   loadingText: {
-    marginTop: 10,
-    color: '#555'
+    marginTop: 10
   },
-  emptyText: {
+  empty: {
     textAlign: 'center',
-    marginTop: 20,
-    color: '#888'
+    color: '#888',
+    marginTop: 20
   },
   card: {
     backgroundColor: '#fff',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
     elevation: 3
   },
   deviceName: {

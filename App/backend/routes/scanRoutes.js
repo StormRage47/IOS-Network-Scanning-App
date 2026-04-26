@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { addScan, getScans } = require('../controllers/scanController');
+const { runScan } = require('/Users/stormrage/Documents/GitHub/IOS-Network-Scanning-App/App/backend/controllers/scanController');
 
-router.post('/scan', addScan);
-router.get('/scans', getScans);
+router.get('/scan', runScan);
 
 module.exports = router;

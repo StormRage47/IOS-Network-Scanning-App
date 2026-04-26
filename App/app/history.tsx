@@ -6,7 +6,7 @@ export default function HistoryScreen() {
 
   const fetchScans = async () => {
     try {
-      const res = await fetch('http://192.168.1.15:3000/api/scans');
+      const res = await fetch('http://192.168.1.11:3000/api/scans');
       const data = await res.json();
       setScans(data);
     } catch (err) {
